@@ -1,0 +1,31 @@
+{
+  "module": "2B",
+  "model": "facebook/wav2vec2-xls-r-300m",
+  "device": "cpu",
+  "batch_size": 1,
+  "window_samples": 16000,
+  "embedding_dimension": 1024,
+  "repetitions": 10,
+  "processor": {
+    "mean_ms": 0.45477200255845673,
+    "median_ms": 0.4839515022467822,
+    "p95_ms": 0.5551521055167541
+  },
+  "forward": {
+    "mean_ms": 180.1042459992459,
+    "median_ms": 178.67513300006976,
+    "p95_ms": 192.6524081507523
+  },
+  "mean_pool": {
+    "mean_ms": 0.48679089959478006,
+    "median_ms": 0.4075244978594128,
+    "p95_ms": 0.676818501597154
+  },
+  "total": {
+    "mean_ms": 181.04580890139914,
+    "median_ms": 179.4788845036237,
+    "p95_ms": 193.82182220033428
+  },
+  "process_rss_mb": 2621.13,
+  "cuda_allocated_mb": null
+}

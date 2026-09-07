@@ -1,0 +1,42 @@
+[
+  {
+    "mean_predicted_probability": 5.244216326562971e-06,
+    "observed_spoof_fraction": 0.0
+  },
+  {
+    "mean_predicted_probability": 3.492503440924752e-05,
+    "observed_spoof_fraction": 0.0
+  },
+  {
+    "mean_predicted_probability": 0.3835858978425659,
+    "observed_spoof_fraction": 0.3904382470119522
+  },
+  {
+    "mean_predicted_probability": 0.9912560278521217,
+    "observed_spoof_fraction": 0.984
+  },
+  {
+    "mean_predicted_probability": 0.999599567162861,
+    "observed_spoof_fraction": 1.0
+  },
+  {
+    "mean_predicted_probability": 0.9999392056171204,
+    "observed_spoof_fraction": 1.0
+  },
+  {
+    "mean_predicted_probability": 0.9999906454446476,
+    "observed_spoof_fraction": 1.0
+  },
+  {
+    "mean_predicted_probability": 0.9999988309861656,
+    "observed_spoof_fraction": 1.0
+  },
+  {
+    "mean_predicted_probability": 0.9999998426945617,
+    "observed_spoof_fraction": 1.0
+  },
+  {
+    "mean_predicted_probability": 0.9999999852258521,
+    "observed_spoof_fraction": 1.0
+  }
+]

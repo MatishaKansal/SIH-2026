@@ -1,0 +1,72 @@
+{
+  "LightGBM": {
+    "roc_auc": 1.0,
+    "pr_auc": 1.0,
+    "eer": 0.0,
+    "f1": 1.0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "specificity": 1.0,
+    "accuracy": 1.0,
+    "far": 0.0,
+    "frr": 0.0,
+    "confusion_matrix": [
+      [
+        740,
+        0
+      ],
+      [
+        0,
+        1847
+      ]
+    ],
+    "latency_ms": 0.9807269996963441
+  },
+  "XGBoost": {
+    "roc_auc": 1.0,
+    "pr_auc": 1.0,
+    "eer": 0.0,
+    "f1": 1.0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "specificity": 1.0,
+    "accuracy": 1.0,
+    "far": 0.0,
+    "frr": 0.0,
+    "confusion_matrix": [
+      [
+        740,
+        0
+      ],
+      [
+        0,
+        1847
+      ]
+    ],
+    "latency_ms": 0.5812539998441935
+  },
+  "CatBoost": {
+    "roc_auc": 1.0,
+    "pr_auc": 1.0,
+    "eer": 0.0,
+    "f1": 1.0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "specificity": 1.0,
+    "accuracy": 1.0,
+    "far": 0.0,
+    "frr": 0.0,
+    "confusion_matrix": [
+      [
+        740,
+        0
+      ],
+      [
+        0,
+        1847
+      ]
+    ],
+    "latency_ms": 0.5254549998790026
+  },
+  "winner": "CatBoost"
+}

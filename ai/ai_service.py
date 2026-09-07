@@ -10,7 +10,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
 ROOT = Path(__file__).resolve().parent
-MODULE_2B = ROOT
+MODULE_2B = ROOT / "Module 2B"
 sys.path.insert(0, str(MODULE_2B))
 
 from prosody.detector import ProsodySpoofDetector  # noqa: E402

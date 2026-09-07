@@ -1,0 +1,10 @@
+embedding_id,embedding_index,dataset,source_id,source_audio,speaker_id,generator,chunk_id,start,end,duration,padded,region_index,label,sample_rate,file
+synthetic_voice:0,0,module1_synthetic_demo,synthetic_voice,input_audio/synthetic_voice.wav,,,0,0.226,1.226,1.0,False,0,1,16000,speech_000.wav
+synthetic_voice:1,1,module1_synthetic_demo,synthetic_voice,input_audio/synthetic_voice.wav,,,1,0.726,1.726,1.0,False,0,1,16000,speech_001.wav
+synthetic_voice:2,2,module1_synthetic_demo,synthetic_voice,input_audio/synthetic_voice.wav,,,2,1.226,2.226,1.0,False,0,1,16000,speech_002.wav
+synthetic_voice:3,3,module1_synthetic_demo,synthetic_voice,input_audio/synthetic_voice.wav,,,3,1.726,2.726,1.0,False,0,1,16000,speech_003.wav
+synthetic_voice:4,4,module1_synthetic_demo,synthetic_voice,input_audio/synthetic_voice.wav,,,4,2.226,3.226,1.0,False,0,1,16000,speech_004.wav
+synthetic_voice:5,5,module1_synthetic_demo,synthetic_voice,input_audio/synthetic_voice.wav,,,5,2.726,3.726,1.0,False,0,1,16000,speech_005.wav
+synthetic_voice:6,6,module1_synthetic_demo,synthetic_voice,input_audio/synthetic_voice.wav,,,6,3.226,4.226,1.0,False,0,1,16000,speech_006.wav
+synthetic_voice:7,7,module1_synthetic_demo,synthetic_voice,input_audio/synthetic_voice.wav,,,7,3.726,4.726,1.0,False,0,1,16000,speech_007.wav
+synthetic_voice:8,8,module1_synthetic_demo,synthetic_voice,input_audio/synthetic_voice.wav,,,8,4.226,4.958,0.732,True,0,1,16000,speech_008.wav

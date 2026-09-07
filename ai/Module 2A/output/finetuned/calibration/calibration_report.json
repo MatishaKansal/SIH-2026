@@ -1,0 +1,126 @@
+{
+  "metadata": {
+    "artifact_version": 1,
+    "method": "Platt scaling (one-feature logistic regression)",
+    "probability_meaning": "P(spoof | window), calibrated to the calibration-set class prior",
+    "score_input": "AASIST spoof_score = logit[0] - logit[1]",
+    "model_checkpoint_sha256": "0ebd77d45148c8065f480656d75351d4263b2d6dd65fbacc2d1d91829abcd402",
+    "model_identifier": "AASIST-finetuned-v2",
+    "calibration_sample_count": 2505,
+    "calibration_class_counts": {
+      "bona_fide": 658,
+      "spoof": 1847
+    },
+    "class_weight": null,
+    "warning": "Fit-set metrics are diagnostics only; use an untouched test split for final estimates.",
+    "operating_threshold": 0.6333875512394284,
+    "threshold_selection": "Youden J selected on calibration split only"
+  },
+  "fit_diagnostics": {
+    "sample_count": 2505,
+    "bona_fide_count": 658,
+    "spoof_count": 1847,
+    "spoof_fraction": 0.7373253493013973,
+    "roc_auc": 0.9991187549678029,
+    "eer": 0.018374905169477145,
+    "score_distribution": {
+      "all": {
+        "count": 2505,
+        "mean": 0.7373196537104157,
+        "std": 0.4312647200226144,
+        "min": 2.314099958636408e-07,
+        "p05": 4.8666009627656975e-06,
+        "median": 0.999872378502226,
+        "p95": 0.9999999892294051,
+        "max": 0.9999999999909179
+      },
+      "bona_fide": {
+        "count": 658,
+        "mean": 0.028414397731509822,
+        "std": 0.13584916145947423,
+        "min": 2.314099958636408e-07,
+        "p05": 1.697566880206687e-06,
+        "median": 1.8209593937377756e-05,
+        "p95": 0.08319586141350438,
+        "max": 0.9901209807359721
+      },
+      "spoof": {
+        "count": 1847,
+        "mean": 0.9898695499931013,
+        "std": 0.053465018838188424,
+        "min": 0.23535310385892688,
+        "p05": 0.964821129360886,
+        "median": 0.9999881800192607,
+        "p95": 0.9999999933816427,
+        "max": 0.9999999999909179
+      }
+    },
+    "threshold": 0.6333875512394284,
+    "accuracy": 0.9916167664670659,
+    "precision": 0.9935135135135135,
+    "recall": 0.9951272333513806,
+    "f1": 0.9943197186908304,
+    "confusion_matrix": [
+      [
+        646,
+        12
+      ],
+      [
+        9,
+        1838
+      ]
+    ],
+    "false_rejection_rate": 0.0182370820668693,
+    "false_acceptance_rate": 0.004872766648619383,
+    "brier_score": 0.007243056362268046,
+    "reliability_curve": [
+      {
+        "mean_predicted_probability": 5.244216326562971e-06,
+        "observed_spoof_fraction": 0.0
+      },
+      {
+        "mean_predicted_probability": 3.492503440924752e-05,
+        "observed_spoof_fraction": 0.0
+      },
+      {
+        "mean_predicted_probability": 0.3835858978425659,
+        "observed_spoof_fraction": 0.3904382470119522
+      },
+      {
+        "mean_predicted_probability": 0.9912560278521217,
+        "observed_spoof_fraction": 0.984
+      },
+      {
+        "mean_predicted_probability": 0.999599567162861,
+        "observed_spoof_fraction": 1.0
+      },
+      {
+        "mean_predicted_probability": 0.9999392056171204,
+        "observed_spoof_fraction": 1.0
+      },
+      {
+        "mean_predicted_probability": 0.9999906454446476,
+        "observed_spoof_fraction": 1.0
+      },
+      {
+        "mean_predicted_probability": 0.9999988309861656,
+        "observed_spoof_fraction": 1.0
+      },
+      {
+        "mean_predicted_probability": 0.9999998426945617,
+        "observed_spoof_fraction": 1.0
+      },
+      {
+        "mean_predicted_probability": 0.9999999852258521,
+        "observed_spoof_fraction": 1.0
+      }
+    ],
+    "threshold_selection": "Youden J selected on calibration split only"
+  },
+  "operating_threshold": 0.6333875512394284,
+  "created_at": "2026-09-05T12:45:10.121385+00:00",
+  "scores_file": "/home/kirat/coding/SIH/Module 2A/output/finetuned_v2/evaluation/calibration_predictions.csv",
+  "checkpoint": "/home/kirat/coding/SIH/Module 2A/output/finetuned_v2/checkpoints/best_model.pth",
+  "checkpoint_sha256": "0ebd77d45148c8065f480656d75351d4263b2d6dd65fbacc2d1d91829abcd402",
+  "calibration_model": "/home/kirat/coding/SIH/Module 2A/output/finetuned_v2/calibration/calibration_model.joblib"
+}

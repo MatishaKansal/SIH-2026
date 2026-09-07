@@ -1,0 +1,9 @@
+numpy
+scipy
+soundfile
+torch
+scikit-learn
+matplotlib
+pytest
+datasets
+pyarrow

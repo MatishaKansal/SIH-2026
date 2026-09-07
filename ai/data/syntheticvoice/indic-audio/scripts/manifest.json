@@ -1,0 +1,119 @@
+{
+  "hi_shivani.txt": {
+    "lines": 240,
+    "est_minutes": 29.7
+  },
+  "hi_meera.txt": {
+    "lines": 240,
+    "est_minutes": 34.8
+  },
+  "hi_atul.txt": {
+    "lines": 240,
+    "est_minutes": 41.7
+  },
+  "hi_ravi.txt": {
+    "lines": 240,
+    "est_minutes": 16.9
+  },
+  "bed_hindi.txt": {
+    "lines": 1900,
+    "est_minutes": 241.8
+  },
+  "en_aman.txt": {
+    "lines": 160,
+    "est_minutes": 9.3
+  },
+  "en_arjun.txt": {
+    "lines": 160,
+    "est_minutes": 13.1
+  },
+  "en_kabir.txt": {
+    "lines": 160,
+    "est_minutes": 16.7
+  },
+  "en_dev.txt": {
+    "lines": 160,
+    "est_minutes": 9.3
+  },
+  "en_sameer.txt": {
+    "lines": 160,
+    "est_minutes": 16.6
+  },
+  "en_priya.txt": {
+    "lines": 160,
+    "est_minutes": 12.9
+  },
+  "en_ananya.txt": {
+    "lines": 160,
+    "est_minutes": 9.8
+  },
+  "en_divya.txt": {
+    "lines": 160,
+    "est_minutes": 15.0
+  },
+  "en_nisha.txt": {
+    "lines": 160,
+    "est_minutes": 13.1
+  },
+  "en_tara.txt": {
+    "lines": 160,
+    "est_minutes": 16.6
+  },
+  "hing_shivani.txt": {
+    "lines": 50,
+    "est_minutes": 2.6
+  },
+  "hing_meera.txt": {
+    "lines": 50,
+    "est_minutes": 4.7
+  },
+  "hing_atul.txt": {
+    "lines": 50,
+    "est_minutes": 3.5
+  },
+  "hing_ravi.txt": {
+    "lines": 50,
+    "est_minutes": 2.3
+  },
+  "hing_aman.txt": {
+    "lines": 50,
+    "est_minutes": 2.3
+  },
+  "hing_arjun.txt": {
+    "lines": 50,
+    "est_minutes": 3.5
+  },
+  "hing_kabir.txt": {
+    "lines": 50,
+    "est_minutes": 3.5
+  },
+  "hing_dev.txt": {
+    "lines": 50,
+    "est_minutes": 2.4
+  },
+  "hing_sameer.txt": {
+    "lines": 50,
+    "est_minutes": 3.3
+  },
+  "hing_priya.txt": {
+    "lines": 50,
+    "est_minutes": 3.4
+  },
+  "hing_ananya.txt": {
+    "lines": 50,
+    "est_minutes": 2.3
+  },
+  "hing_divya.txt": {
+    "lines": 50,
+    "est_minutes": 4.2
+  },
+  "hing_nisha.txt": {
+    "lines": 50,
+    "est_minutes": 3.5
+  },
+  "hing_tara.txt": {
+    "lines": 50,
+    "est_minutes": 3.5
+  },
+  "_total_est_hours": 9.04
+}

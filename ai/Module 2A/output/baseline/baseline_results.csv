@@ -1,0 +1,7 @@
+timestamp,input_file,duration,raw_score,spoof_score,spoof_probability,label,model,stage
+2026-09-04T17:34:13.313012+00:00,/home/kirat/coding/SIH/Module 2A/../Module 1/output/real_voice/speech_000.wav,1.0,-4.915439128875732,9.70936107635498,,,AASIST,baseline
+2026-09-04T17:36:06.399487+00:00,/home/kirat/coding/SIH/Module 2A/../Module 1/input_audio/real_voice.wav,8.7595,-3.7096993923187256,7.4055540561676025,,,AASIST,baseline
+2026-09-04T17:36:06.420652+00:00,/home/kirat/coding/SIH/Module 2A/../Module 1/input_audio/synthetic_voice.wav,5.150625,2.4550673961639404,-6.357018232345581,,,AASIST,baseline
+2026-09-05T02:19:46.347161+00:00,/home/kirat/coding/SIH/Module 2A/../Module 1/input_audio/real_voice.wav,8.7595,-3.7096993923187256,7.4055540561676025,,,AASIST,baseline
+2026-09-05T02:19:46.364837+00:00,/home/kirat/coding/SIH/Module 2A/../Module 1/input_audio/synthetic_voice.wav,5.150625,2.4550673961639404,-6.357018232345581,,,AASIST,baseline
+2026-09-05T08:48:56.972157+00:00,"/home/kirat/coding/SIH/test/ElevenLabs_2026-09-05T08_31_12_Roger - Laid-Back, Casual, Resonant_pre_sp100_s50_sb75_se0_b_m2.mp3",7.1981875,-1.3123937845230103,1.8111546337604523,,,AASIST,baseline

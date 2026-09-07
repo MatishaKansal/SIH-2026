@@ -1,0 +1,5 @@
+silero-vad==6.2.1
+torch
+numpy
+scipy
+soundfile

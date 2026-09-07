@@ -1,0 +1,23 @@
+{
+  "completed_at": "2026-09-05T12:24:30.040728+00:00",
+  "device": "cuda",
+  "manifest": "/home/kirat/coding/SIH/Module 2A/output/datasets/target_domain_manifest.csv",
+  "pretrained_checkpoint": "/home/kirat/coding/SIH/Module 2A/output/finetuned/checkpoints/best_model.pth",
+  "pretrained_checkpoint_sha256": "8e9d5d95969c61799478dcc6ff47cb9add767d957805aba78701bd5b0dcca33c",
+  "split_sizes": {
+    "train": 17518,
+    "validation": 2587,
+    "calibration": 2505,
+    "test": 2512
+  },
+  "class_balance_train": {
+    "bona_fide": 4593,
+    "spoof": 12925
+  },
+  "trainable_parameter_prefixes": [],
+  "trainable_parameter_count": 175,
+  "torch_version": "2.9.1+cu128",
+  "numpy_version": "2.2.6",
+  "best_checkpoint": "/home/kirat/coding/SIH/Module 2A/output/finetuned_v2/checkpoints/best_model.pth",
+  "note": "Calibration and test data were not used by training. Run evaluate.py and calibrate.py separately after training."
+}

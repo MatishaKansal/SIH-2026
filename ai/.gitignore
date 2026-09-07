@@ -1,0 +1,42 @@
+# Python caches and local environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+
+# Large model weights and dataset payloads (hosted on Hugging Face Hub: kritansh/SIH-2026)
+models/aasist/*.pth
+models/silero_vad/*.onnx
+models/silero_vad/*.jit
+models/xlsr-300m/*.bin
+data/realvoice/Svarah/data/*.parquet
+data/syntheticvoice/orpheus_tts_english_indian_multispeaker/data/*.parquet
+data/syntheticvoice/indic-audio/audio/
+
+# HuggingFace dataset caches
+data/**/.cache/
+
+# Local temporary outputs
+test_*.wav
+test/
+Module 1/output/*/speech_*.wav
+Module 2A/output/baseline/*.json
+*.log
+Module 2B/output/*.log
+
+# OS and editor files
+.DS_Store
+.idea/
+.vscode/
+
+# AI context and handover documents
+context.md
+resources
+powershell.cmd
+catboost_info/
+Module 1/output/
+Module 2A/output/finetuned_v1/
+Module 2A/output/finetuned_v2/

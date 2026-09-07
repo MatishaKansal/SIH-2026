@@ -1,0 +1,8 @@
+torch
+numpy
+scipy
+soundfile
+scikit-learn
+joblib
+pyarrow
+tqdm

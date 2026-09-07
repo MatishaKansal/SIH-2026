@@ -1,0 +1,218 @@
+{
+  "comparison": "pretrained versus fine-tuned AASIST; only valid when both files used the same held-out test manifest and operating threshold policy",
+  "pretrained": {
+    "sample_count": 1996,
+    "bona_fide_count": 665,
+    "spoof_count": 1331,
+    "spoof_fraction": 0.6668336673346693,
+    "roc_auc": 1.0,
+    "eer": 0.0,
+    "score_distribution": {
+      "all": {
+        "count": 1996,
+        "mean": 0.6680771324529737,
+        "std": 0.470182974243757,
+        "min": 3.452331978958506e-08,
+        "p05": 1.944235054833234e-06,
+        "median": 0.999999999860285,
+        "p95": 0.9999999999999978,
+        "max": 1.0
+      },
+      "bona_fide": {
+        "count": 665,
+        "mean": 0.003734433810536465,
+        "std": 0.04107906891388316,
+        "min": 3.452331978958506e-08,
+        "p05": 5.041540175828942e-07,
+        "median": 2.1768852256105714e-05,
+        "p95": 0.0009793806702541475,
+        "max": 0.6581088148406753
+      },
+      "spoof": {
+        "count": 1331,
+        "mean": 0.9999989165230118,
+        "std": 3.1911543452969604e-05,
+        "min": 0.998876110557545,
+        "p05": 0.9999999922351086,
+        "median": 0.999999999995868,
+        "p95": 0.9999999999999993,
+        "max": 1.0
+      }
+    },
+    "threshold": 0.4375647557363671,
+    "accuracy": 0.998496993987976,
+    "precision": 0.9977511244377811,
+    "recall": 1.0,
+    "f1": 0.998874296435272,
+    "confusion_matrix": [
+      [
+        662,
+        3
+      ],
+      [
+        0,
+        1331
+      ]
+    ],
+    "false_rejection_rate": 0.004511278195488722,
+    "false_acceptance_rate": 0.0,
+    "brier_score": 0.0005668618384912432,
+    "reliability_curve": [
+      {
+        "mean_predicted_probability": 2.2129643968217984e-06,
+        "observed_spoof_fraction": 0.0
+      },
+      {
+        "mean_predicted_probability": 1.8358716136243804e-05,
+        "observed_spoof_fraction": 0.0
+      },
+      {
+        "mean_predicted_probability": 0.00010249153414806301,
+        "observed_spoof_fraction": 0.0
+      },
+      {
+        "mean_predicted_probability": 0.6822872317827283,
+        "observed_spoof_fraction": 0.67
+      },
+      {
+        "mean_predicted_probability": 0.9999999993967805,
+        "observed_spoof_fraction": 1.0
+      },
+      {
+        "mean_predicted_probability": 0.9999999999492312,
+        "observed_spoof_fraction": 1.0
+      },
+      {
+        "mean_predicted_probability": 0.999999999992809,
+        "observed_spoof_fraction": 1.0
+      },
+      {
+        "mean_predicted_probability": 0.9999999999991541,
+        "observed_spoof_fraction": 1.0
+      },
+      {
+        "mean_predicted_probability": 0.9999999999999151,
+        "observed_spoof_fraction": 1.0
+      },
+      {
+        "mean_predicted_probability": 0.9999999999999977,
+        "observed_spoof_fraction": 1.0
+      }
+    ],
+    "mean_loss": null,
+    "threshold_note": "No operating threshold supplied; accuracy/precision/recall/F1 require a calibration-selected threshold."
+  },
+  "finetuned": {
+    "sample_count": 2512,
+    "bona_fide_count": 665,
+    "spoof_count": 1847,
+    "spoof_fraction": 0.7352707006369427,
+    "roc_auc": 0.9999788317572491,
+    "eer": 0.001564007474018031,
+    "score_distribution": {
+      "all": {
+        "count": 2512,
+        "mean": 0.7334924119706309,
+        "std": 0.4391032547493664,
+        "min": 1.2540605814657815e-07,
+        "p05": 4.474166745454978e-06,
+        "median": 0.9998684931772179,
+        "p95": 0.9999999840796424,
+        "max": 0.9999999999886047
+      },
+      "bona_fide": {
+        "count": 665,
+        "mean": 0.00451449959932446,
+        "std": 0.0383966705848044,
+        "min": 1.2540605814657815e-07,
+        "p05": 1.1111323493865843e-06,
+        "median": 1.9681459559988764e-05,
+        "p95": 0.005972730466822652,
+        "max": 0.777980281165685
+      },
+      "spoof": {
+        "count": 1847,
+        "mean": 0.9959560349954921,
+        "std": 0.038523622213338896,
+        "min": 0.05597260815858761,
+        "p05": 0.9928679446980029,
+        "median": 0.9999794616021943,
+        "p95": 0.9999999912872792,
+        "max": 0.9999999999886047
+      }
+    },
+    "threshold": 0.6333875512394284,
+    "accuracy": 0.9980095541401274,
+    "precision": 0.9994577006507592,
+    "recall": 0.9978343259339469,
+    "f1": 0.9986453535627201,
+    "confusion_matrix": [
+      [
+        664,
+        1
+      ],
+      [
+        4,
+        1843
+      ]
+    ],
+    "false_rejection_rate": 0.0015037593984962407,
+    "false_acceptance_rate": 0.002165674066053059,
+    "brier_score": 0.001498904077469498,
+    "reliability_curve": [
+      {
+        "mean_predicted_probability": 5.0845696864088195e-06,
+        "observed_spoof_fraction": 0.0
+      },
+      {
+        "mean_predicted_probability": 3.215606430594213e-05,
+        "observed_spoof_fraction": 0.0
+      },
+      {
+        "mean_predicted_probability": 0.3393337701984899,
+        "observed_spoof_fraction": 0.3545816733067729
+      },
+      {
+        "mean_predicted_probability": 0.9977888720796746,
+        "observed_spoof_fraction": 1.0
+      },
+      {
+        "mean_predicted_probability": 0.9997192778183656,
+        "observed_spoof_fraction": 1.0
+      },
+      {
+        "mean_predicted_probability": 0.9999260305411773,
+        "observed_spoof_fraction": 1.0
+      },
+      {
+        "mean_predicted_probability": 0.9999824822937758,
+        "observed_spoof_fraction": 1.0
+      },
+      {
+        "mean_predicted_probability": 0.9999972315080108,
+        "observed_spoof_fraction": 1.0
+      },
+      {
+        "mean_predicted_probability": 0.9999997131302335,
+        "observed_spoof_fraction": 1.0
+      },
+      {
+        "mean_predicted_probability": 0.9999999786369896,
+        "observed_spoof_fraction": 1.0
+      }
+    ],
+    "mean_loss": null,
+    "threshold_note": "No operating threshold supplied; accuracy/precision/recall/F1 require a calibration-selected threshold."
+  },
+  "delta_finetuned_minus_pretrained": {
+    "roc_auc": -2.1168242750890798e-05,
+    "eer": 0.001564007474018031,
+    "accuracy": -0.00048743984784860306,
+    "precision": 0.0017065762129780948,
+    "recall": -0.0021656740660530582,
+    "f1": -0.00022894287255192936,
+    "brier_score": 0.0009320422389782547,
+    "false_acceptance_rate": 0.002165674066053059,
+    "false_rejection_rate": -0.0030075187969924814
+  }
+}

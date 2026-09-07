@@ -1,0 +1,16 @@
+numpy
+scipy
+librosa==0.10.2.post1
+audioread
+soundfile
+praat-parselmouth
+scikit-learn
+pyarrow
+pandas
+tqdm
+joblib
+matplotlib
+lightgbm
+xgboost
+catboost
+shap

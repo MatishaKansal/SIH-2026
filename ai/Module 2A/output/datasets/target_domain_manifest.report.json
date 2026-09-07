@@ -1,0 +1,40 @@
+{
+  "manifest": "/home/kirat/coding/SIH/Module 2A/output/datasets/target_domain_manifest.csv",
+  "seed": 1337,
+  "total_records": 25122,
+  "class_counts": {
+    "bona_fide": 6656,
+    "spoof": 18466
+  },
+  "spoof_source_counts": {
+    "Orpheus": 13306,
+    "IndicAudio": 5160
+  },
+  "split_class_counts": {
+    "train": {
+      "bona_fide": 4593,
+      "spoof": 12925
+    },
+    "validation": {
+      "bona_fide": 740,
+      "spoof": 1847
+    },
+    "calibration": {
+      "bona_fide": 658,
+      "spoof": 1847
+    },
+    "test": {
+      "bona_fide": 665,
+      "spoof": 1847
+    }
+  },
+  "group_counts": {
+    "bona_fide": 110,
+    "spoof": 13321
+  },
+  "grouping_limitations": [
+    "Svarah local Parquet schema has no speaker ID; geographic/demographic proxy groups are used.",
+    "Orpheus local schema has only two source IDs, insufficient for a three-way source-held-out split; each recording is isolated but generation-source independence is not established.",
+    "IndicAudio groups by voice persona (29 groups); all clips from the same ElevenLabs/Fish Audio persona stay in the same split."
+  ]
+}

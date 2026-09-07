@@ -1,0 +1,20 @@
+{
+  "seed": 1337,
+  "batch_size": 16,
+  "num_workers": 2,
+  "learning_rate": 0.00001,
+  "weight_decay": 0.0001,
+  "num_epochs": 50,
+  "patience": 7,
+  "gradient_clip_norm": 5.0,
+  "mixed_precision": true,
+  "checkpoint_interval": 1,
+  "trainable_parameter_prefixes": [],
+  "augmentation": {
+    "enabled": true,
+    "gain_probability": 0.3,
+    "gain_db_range": [-6.0, 6.0],
+    "noise_probability": 0.25,
+    "snr_db_range": [15.0, 40.0]
+  }
+}

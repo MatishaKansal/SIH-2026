@@ -1,0 +1,110 @@
+{
+  "checkpoint": "/home/kirat/coding/SIH/models/aasist/AASIST.pth",
+  "checkpoint_sha256": "51d2d9cf0738172f61e2a384ec50a54a55363240f67c971ed55a92435bc1a1c0",
+  "split": "test",
+  "device": "cuda",
+  "calibrator": "output/baseline/calibration/calibration_model.joblib",
+  "diagnostic_sample_limit_per_class": null,
+  "metrics": {
+    "sample_count": 1996,
+    "bona_fide_count": 665,
+    "spoof_count": 1331,
+    "spoof_fraction": 0.6668336673346693,
+    "roc_auc": 0.9365664348700451,
+    "eer": 0.1454336442157234,
+    "score_distribution": {
+      "all": {
+        "count": 1996,
+        "mean": 0.6552765490625007,
+        "std": 0.3545736059539913,
+        "min": 0.00012199010385770617,
+        "p05": 0.009228174203824225,
+        "median": 0.8376543775078968,
+        "p95": 0.9773565659592272,
+        "max": 0.9975353919831554
+      },
+      "bona_fide": {
+        "count": 665,
+        "mean": 0.25981751555748156,
+        "std": 0.3094556327588352,
+        "min": 0.00012199010385770617,
+        "p05": 0.002579612856933194,
+        "median": 0.06786176701054035,
+        "p95": 0.8695930391363075,
+        "max": 0.9907453024700675
+      },
+      "spoof": {
+        "count": 1331,
+        "mean": 0.8528575087024991,
+        "std": 0.1533545017915558,
+        "min": 0.08241686404724642,
+        "p05": 0.5230027344080983,
+        "median": 0.9094693223020159,
+        "p95": 0.979889256111895,
+        "max": 0.9975353919831554
+      }
+    },
+    "threshold": 0.5040604834923532,
+    "accuracy": 0.8847695390781564,
+    "precision": 0.8799171842650103,
+    "recall": 0.9579263711495116,
+    "f1": 0.9172661870503597,
+    "confusion_matrix": [
+      [
+        491,
+        174
+      ],
+      [
+        56,
+        1275
+      ]
+    ],
+    "false_rejection_rate": 0.26165413533834586,
+    "false_acceptance_rate": 0.042073628850488355,
+    "brier_score": 0.08451526464115135,
+    "reliability_curve": [
+      {
+        "mean_predicted_probability": 0.00949306800817782,
+        "observed_spoof_fraction": 0.0
+      },
+      {
+        "mean_predicted_probability": 0.06272323441428415,
+        "observed_spoof_fraction": 0.045
+      },
+      {
+        "mean_predicted_probability": 0.3918805020083724,
+        "observed_spoof_fraction": 0.36683417085427134
+      },
+      {
+        "mean_predicted_probability": 0.6595734647777445,
+        "observed_spoof_fraction": 0.69
+      },
+      {
+        "mean_predicted_probability": 0.7907235133652879,
+        "observed_spoof_fraction": 0.8090452261306532
+      },
+      {
+        "mean_predicted_probability": 0.8640380562416883,
+        "observed_spoof_fraction": 0.885
+      },
+      {
+        "mean_predicted_probability": 0.9065550932999573,
+        "observed_spoof_fraction": 0.9547738693467337
+      },
+      {
+        "mean_predicted_probability": 0.9363699827371361,
+        "observed_spoof_fraction": 0.96
+      },
+      {
+        "mean_predicted_probability": 0.9565215123569157,
+        "observed_spoof_fraction": 0.9748743718592965
+      },
+      {
+        "mean_predicted_probability": 0.9770099355393453,
+        "observed_spoof_fraction": 0.985
+      }
+    ],
+    "mean_loss": null,
+    "threshold_note": "No operating threshold supplied; accuracy/precision/recall/F1 require a calibration-selected threshold."
+  }
+}

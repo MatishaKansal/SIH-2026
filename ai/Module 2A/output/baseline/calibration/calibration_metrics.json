@@ -1,0 +1,101 @@
+{
+  "sample_count": 1989,
+  "bona_fide_count": 658,
+  "spoof_count": 1331,
+  "spoof_fraction": 0.6691804927099044,
+  "roc_auc": 0.901456728606368,
+  "eer": 0.19418404700627317,
+  "score_distribution": {
+    "all": {
+      "count": 1989,
+      "mean": 0.6691762592667834,
+      "std": 0.3437981218723093,
+      "min": 1.5190926229813764e-05,
+      "p05": 0.011225965888445141,
+      "median": 0.8359507781325929,
+      "p95": 0.9776410359539353,
+      "max": 0.9952059985799445
+    },
+    "bona_fide": {
+      "count": 658,
+      "mean": 0.3088333266757576,
+      "std": 0.33173617715223896,
+      "min": 1.5190926229813764e-05,
+      "p05": 0.0015341648285311137,
+      "median": 0.1451360181249653,
+      "p95": 0.9144035350507405,
+      "max": 0.9929027120368874
+    },
+    "spoof": {
+      "count": 1331,
+      "mean": 0.8473172432223768,
+      "std": 0.1621706146408428,
+      "min": 0.07390184777345021,
+      "p05": 0.5014729416463788,
+      "median": 0.9128500394073639,
+      "p95": 0.9801386134917938,
+      "max": 0.9952059985799445
+    }
+  },
+  "threshold": 0.5040604834923532,
+  "accuracy": 0.8722976370035194,
+  "precision": 0.8716356107660456,
+  "recall": 0.9489105935386927,
+  "f1": 0.9086330935251798,
+  "confusion_matrix": [
+    [
+      472,
+      186
+    ],
+    [
+      68,
+      1263
+    ]
+  ],
+  "false_rejection_rate": 0.2826747720364742,
+  "false_acceptance_rate": 0.05108940646130729,
+  "brier_score": 0.10115816667682075,
+  "reliability_curve": [
+    {
+      "mean_predicted_probability": 0.012587571296627109,
+      "observed_spoof_fraction": 0.0
+    },
+    {
+      "mean_predicted_probability": 0.11444084421905437,
+      "observed_spoof_fraction": 0.08542713567839195
+    },
+    {
+      "mean_predicted_probability": 0.4297503174784547,
+      "observed_spoof_fraction": 0.4723618090452261
+    },
+    {
+      "mean_predicted_probability": 0.6806971679360313,
+      "observed_spoof_fraction": 0.7738693467336684
+    },
+    {
+      "mean_predicted_probability": 0.7976148186695979,
+      "observed_spoof_fraction": 0.6733668341708543
+    },
+    {
+      "mean_predicted_probability": 0.8698502130546292,
+      "observed_spoof_fraction": 0.8838383838383839
+    },
+    {
+      "mean_predicted_probability": 0.9116705476797106,
+      "observed_spoof_fraction": 0.9597989949748744
+    },
+    {
+      "mean_predicted_probability": 0.938952197156998,
+      "observed_spoof_fraction": 0.9547738693467337
+    },
+    {
+      "mean_predicted_probability": 0.9585412670208847,
+      "observed_spoof_fraction": 0.9698492462311558
+    },
+    {
+      "mean_predicted_probability": 0.978666059983925,
+      "observed_spoof_fraction": 0.9195979899497487
+    }
+  ],
+  "threshold_selection": "Youden J selected on calibration split only"
+}

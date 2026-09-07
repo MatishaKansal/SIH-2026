@@ -1,0 +1,17 @@
+{
+  "module": "2B",
+  "model": "facebook/wav2vec2-xls-r-300m",
+  "device": "cpu",
+  "embedding_dimension": 1024,
+  "processor": "Wav2Vec2FeatureExtractor",
+  "embedding_file": "embeddings.npy",
+  "metadata_file": "metadata.csv",
+  "count": 15,
+  "source_manifests": [
+    "/home/kirat/coding/SIH/Module 1/output/real_voice/manifest.json"
+  ],
+  "padded_count": 3,
+  "labels": {
+    "0": 15
+  }
+}

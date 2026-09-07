@@ -1,24 +1,26 @@
 import { useRef, useState, useEffect } from 'react';
 
 function mapCallToState(call) {
-  const riskScore = Number(call.max_risk_score || call.current_risk_score || 0);
+  const identity = call.claimed_identity || 'Unknown caller';
+  const rawRiskScore = Number(call.max_risk_score || call.current_risk_score || 0);
+  const riskScore = rawRiskScore <= 1 ? rawRiskScore * 100 : rawRiskScore;
   const isHighRisk = call.risk_level === 'HIGH_RISK' || call.decision === 'BLOCKED';
 
   return {
     callState: isHighRisk ? 'HIGH_RISK' : call.risk_level || 'SAFE',
     riskScore,
     metrics: {
-      acoustic: call.acoustic_anomaly_score,
-      prosody: call.prosody_deviation_score,
-      voiceprint: call.voiceprint_mismatch_score,
+      acoustic: call.acoustic_anomaly_score == null ? null : Number(call.acoustic_anomaly_score) * 100,
+      prosody: call.prosody_deviation_score == null ? null : Number(call.prosody_deviation_score) * 100,
+      voiceprint: call.voiceprint_mismatch_score == null ? null : (1 - Number(call.voiceprint_mismatch_score)) * 100,
     },
     callerInfo: {
-      identity: call.claimed_identity,
+      identity,
       number: call.source_phone || 'Unavailable',
       duration: '--:--:--',
       location: 'Backend call session',
       company: 'Enterprise Platform',
-      avatar: call.claimed_identity.slice(0, 2).toUpperCase(),
+      avatar: identity.slice(0, 2).toUpperCase(),
     },
     transaction: {
       type: 'Transaction',
@@ -26,6 +28,38 @@ function mapCallToState(call) {
       destination: 'Transaction details unavailable',
       status: isHighRisk ? 'BLOCKED' : 'PENDING_AUTH',
       reference: call.call_id,
+    },
+  };
+}
+
+function mapUploadResultToState(result, metadata) {
+  const latest = result.results?.[result.results.length - 1] || {};
+  const score = Number(latest.cumulative_risk_score || latest.p_ai_window || 0);
+  const riskScore = score <= 1 ? score * 100 : score;
+  const isHighRisk = latest.wald_decision === 'HIGH_RISK';
+
+  return {
+    callState: latest.wald_decision || 'SAFE',
+    riskScore,
+    metrics: {
+      acoustic: Number(latest.metrics?.aasist_spoof_score || 0) * 100,
+      prosody: Number(latest.metrics?.prosody_anomaly_score || 0) * 100,
+      voiceprint: (1 - Number(latest.metrics?.speaker_match_score || 0)) * 100,
+    },
+    callerInfo: {
+      identity: metadata.claimed_identity || 'Unknown',
+      number: metadata.source_phone || 'Unavailable',
+      duration: '--:--:--',
+      location: 'Uploaded recording',
+      company: 'Enterprise Platform',
+      avatar: (metadata.claimed_identity || 'UC').slice(0, 2).toUpperCase(),
+    },
+    transaction: {
+      type: 'Transaction',
+      amount: 'Not specified',
+      destination: 'Transaction details unavailable',
+      status: isHighRisk ? 'BLOCKED' : 'PENDING_AUTH',
+      reference: result.call_id,
     },
   };
 }
@@ -43,7 +77,14 @@ function mapAuditLog(log) {
 }
 
 export function useCallEngine() {
-  const [state, setState] = useState(null);
+  const [state, setState] = useState(() => {
+    try {
+      const snapshot = window.sessionStorage.getItem('echoguard.last-analysis');
+      return snapshot ? JSON.parse(snapshot) : null;
+    } catch {
+      return null;
+    }
+  });
   const [currentView, setCurrentView] = useState('dashboard');
   const [auditLogs, setAuditLogs] = useState([]);
   const [backendStatus, setBackendStatus] = useState('checking');
@@ -52,7 +93,15 @@ export function useCallEngine() {
   const [liveStatus, setLiveStatus] = useState('idle');
   const [liveError, setLiveError] = useState(null);
   const [activeCallId, setActiveCallId] = useState(null);
+  const [analysisStats, setAnalysisStats] = useState({ avgLatency: null, aiInferences: 0 });
   const liveRef = useRef({ socket: null, stream: null, context: null, processor: null });
+  const refreshInFlight = useRef(false);
+
+  async function refreshAuditLogs() {
+    const response = await fetch('/api/v1/audit/logs');
+    if (!response.ok) throw new Error('Audit log refresh failed');
+    setAuditLogs((await response.json()).map(mapAuditLog));
+  }
 
   function downsampleToPcm16(input, inputRate, outputRate = 16000) {
     const ratio = inputRate / outputRate;
@@ -105,12 +154,30 @@ export function useCallEngine() {
       socket.onmessage = (event) => {
         const message = JSON.parse(event.data);
         if (message.event === 'window_result') {
-          setState((current) => current ? { ...current, riskScore: Number(message.cumulative_risk_score || 0), callState: message.risk_level || current.callState } : current);
+          const rawScore = Number(message.cumulative_risk_score || 0);
+          const metrics = message.explanation || {};
+          setState((current) => current ? {
+            ...current,
+            riskScore: rawScore <= 1 ? rawScore * 100 : rawScore,
+            callState: message.risk_level || current.callState,
+            metrics: {
+              acoustic: Number(metrics.spoof_confidence?.replace('%', '') || 0),
+              prosody: Number(metrics.prosody?.match(/[\d.]+$/)?.[0] || 0) * 100,
+              voiceprint: Number(metrics.target_match?.replace('%', '') || 0),
+            },
+          } : current);
+          setAnalysisStats((current) => ({
+            avgLatency: message.latency_ms ?? current.avgLatency,
+            aiInferences: current.aiInferences + 1,
+          }));
         }
         if (message.event === 'error') setLiveError(message.message);
       };
       socket.onerror = () => setLiveError('Live call connection failed');
-      socket.onclose = () => setLiveStatus('idle');
+      socket.onclose = async () => {
+        setLiveStatus('idle');
+        try { await refreshAuditLogs(); } catch { /* health status remains usable */ }
+      };
       liveRef.socket = socket;
       liveRef.stream = stream;
       liveRef.context = context;
@@ -147,6 +214,17 @@ export function useCallEngine() {
       const response = await fetch('/api/v1/calls/upload', { method: 'POST', body: formData });
       const result = await response.json();
       if (!response.ok) throw new Error(result.detail || 'Recorded call upload failed');
+      const nextState = mapUploadResultToState(result, metadata);
+      setState(nextState);
+      window.sessionStorage.setItem('echoguard.last-analysis', JSON.stringify(nextState));
+      const results = result.results || [];
+      setAnalysisStats({
+        avgLatency: results.length
+          ? results.reduce((sum, item) => sum + Number(item.latency_ms || 0), 0) / results.length
+          : null,
+        aiInferences: results.length,
+      });
+      await refreshAuditLogs();
       setLiveStatus('idle');
       return result;
     } catch (requestError) {
@@ -159,37 +237,68 @@ export function useCallEngine() {
   useEffect(() => {
     let isMounted = true;
 
-    async function loadBackendData() {
+    async function fetchWithTimeout(url, timeoutMs = 4000) {
+      const controller = new AbortController();
+      const timeout = window.setTimeout(() => controller.abort(), timeoutMs);
       try {
-        const [healthResponse, callsResponse, auditResponse] = await Promise.all([
-          fetch('/health'),
-          fetch('/api/v1/calls'),
-          fetch('/api/v1/audit/logs'),
-        ]);
+        return await fetch(url, { signal: controller.signal });
+      } finally {
+        window.clearTimeout(timeout);
+      }
+    }
 
-        if (!healthResponse.ok || !callsResponse.ok || !auditResponse.ok) {
-          throw new Error('Backend request failed');
-        }
-
+    async function loadBackendData() {
+      if (refreshInFlight.current) return;
+      refreshInFlight.current = true;
+      try {
+        const callsResponse = await fetchWithTimeout('/api/v1/calls');
+        if (!callsResponse.ok) throw new Error('Call history request failed');
         const calls = await callsResponse.json();
-        const logs = await auditResponse.json();
         if (!isMounted) return;
 
         setBackendStatus('connected');
-        setState(calls.length > 0 ? mapCallToState(calls[0]) : null);
-        setAuditLogs(logs.map(mapAuditLog));
+        const callWithResults = calls.find((call) => Number(call.ai_inference_count || 0) > 0) || calls[0];
+        if (callWithResults) {
+          const nextState = mapCallToState(callWithResults);
+          setState(nextState);
+          window.sessionStorage.setItem('echoguard.last-analysis', JSON.stringify(nextState));
+        }
+        if (callWithResults) {
+          setAnalysisStats({
+            avgLatency: callWithResults.avg_latency_ms,
+            aiInferences: Number(callWithResults.ai_inference_count || 0),
+          });
+        }
+        try {
+          const auditResponse = await fetch('/api/v1/audit/logs');
+          if (auditResponse.ok) setAuditLogs((await auditResponse.json()).map(mapAuditLog));
+        } catch {
+          // Call history remains usable if the audit endpoint is temporarily unavailable.
+        }
         setError(null);
       } catch (requestError) {
         if (!isMounted) return;
         setBackendStatus('offline');
-        setError(requestError.message);
+        setError(requestError.name === 'AbortError' ? 'Backend request timed out' : requestError.message);
       } finally {
+        refreshInFlight.current = false;
         if (isMounted) setIsLoading(false);
       }
     }
 
     loadBackendData();
-    return () => { isMounted = false; };
+    const retryTimer = window.setTimeout(loadBackendData, 1200);
+    const refreshTimer = window.setInterval(loadBackendData, 15000);
+    const handleRefresh = () => loadBackendData();
+    window.addEventListener('focus', handleRefresh);
+    window.addEventListener('pageshow', handleRefresh);
+    return () => {
+      isMounted = false;
+      window.clearTimeout(retryTimer);
+      window.clearInterval(refreshTimer);
+      window.removeEventListener('focus', handleRefresh);
+      window.removeEventListener('pageshow', handleRefresh);
+    };
   }, []);
 
   return {
@@ -207,5 +316,6 @@ export function useCallEngine() {
     startLiveCall,
     stopLiveCall,
     uploadRecording,
+    analysisStats,
   };
 }

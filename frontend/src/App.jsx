@@ -10,7 +10,15 @@ import SettingsModal from './components/overlays/SettingsModal';
 
 export default function App() {
   const engine = useCallEngine();
-  const [account, setAccount] = useState(null);
+  const [account, setAccount] = useState(() => {
+    try {
+      const storedAccount = window.localStorage.getItem('echoguard.account');
+      return storedAccount ? JSON.parse(storedAccount) : null;
+    } catch {
+      window.localStorage.removeItem('echoguard.account');
+      return null;
+    }
+  });
   const [activePanel, setActivePanel] = useState(null); // 'alerts' | 'access' | 'settings' | null
   const [alerts, setAlerts] = useState([]);
 
@@ -31,10 +39,18 @@ export default function App() {
 
   const openPanel  = (panel) => setActivePanel(panel);
   const closePanel = ()      => setActivePanel(null);
+  const handleAuthenticated = (user) => {
+    window.localStorage.setItem('echoguard.account', JSON.stringify(user));
+    setAccount(user);
+  };
+  const handleLogout = () => {
+    window.localStorage.removeItem('echoguard.account');
+    setAccount(null);
+  };
 
   const unreadAlerts = alerts.filter(a => !a.reviewed).length;
 
-  if (!account) return <AuthPage onAuthenticated={setAccount} />;
+  if (!account) return <AuthPage onAuthenticated={handleAuthenticated} />;
 
   return (
     <div className="flex h-screen bg-[#f4f7fb] overflow-hidden font-sans">
@@ -47,7 +63,7 @@ export default function App() {
         onOpenPanel={openPanel}
         unreadAlerts={unreadAlerts}
         account={account}
-        onLogout={() => setAccount(null)}
+        onLogout={handleLogout}
       />
 
       {/* ── Main Content ── */}
@@ -80,6 +96,8 @@ export default function App() {
               stopLiveCall={engine.stopLiveCall}
               uploadRecording={engine.uploadRecording}
               auditLogs={engine.auditLogs}
+              analysisStats={engine.analysisStats}
+              backendStatus={engine.backendStatus}
             />
           )}
           {engine.currentView === 'audit' && (

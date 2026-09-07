@@ -67,6 +67,12 @@ input[type='range']::-moz-range-thumb { width: 0; height: 0; border: 0; }
   border-radius: 12px;
 }
 
+.gauge-shell {
+  background: linear-gradient(145deg, #f8fbfd 0%, #edf4f7 100%);
+  border: 1px solid #dce7ee;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 10px 24px rgba(47, 74, 103, 0.08);
+}
+
 /* Light monitoring workspace overrides for legacy dark utility classes. */
 .glass-card .text-white,
 .glass-card-darker .text-white { color: #1c3048 !important; }
@@ -138,7 +144,7 @@ input[type='range']::-moz-range-thumb { width: 0; height: 0; border: 0; }
 /* ── Risk Score Gauge ── */
 .risk-gauge-track {
   fill: none;
-  stroke: #e4ebf2;
+  stroke: #d5e0e8;
   stroke-width: 12;
   stroke-linecap: round;
 }

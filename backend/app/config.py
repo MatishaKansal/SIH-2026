@@ -16,8 +16,7 @@ class Settings(BaseSettings):
     API_VERSION: str = "1.0.0"
     DEBUG: bool = True
     
-    # Database
-    DATABASE_URL: str = "sqlite:///./fraud_prevention.db"
+    # Supabase
     NEXT_PUBLIC_SUPABASE_URL: str = ""
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: str = ""
     SUPABASE_SERVICE_ROLE_KEY: str = ""

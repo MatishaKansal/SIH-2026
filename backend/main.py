@@ -18,14 +18,9 @@ from fastapi import FastAPI, WebSocket, HTTPException, Depends, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import httpx
-from sqlalchemy.orm import Session
-
 from app.config import settings
-from app.database import SessionLocal, init_db
-from app.models import CallSession, AuditEvent
 from app.services.audio_buffer import AudioBuffer
 from app.services.business_engine import BusinessEngine
-from app.services.audit_logger import AuditLogger
 from app.supabase_client import supabase
 
 # Configure logging
@@ -33,21 +28,11 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def get_db():
-    db = SessionLocal()
-    call_id = None
-    try:
-        yield db
-    finally:
-        db.close()
-
-
 # Lifespan context manager for startup/shutdown
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Initialize database on startup"""
+    """Initialize the API lifecycle."""
     logger.info("Starting up Enterprise Fraud Prevention Platform")
-    init_db()
     yield
     logger.info("Shutting down")
 
@@ -71,7 +56,6 @@ app.add_middleware(
 # Global state
 audio_buffers = {}  # call_id -> AudioBuffer
 business_engine = BusinessEngine()
-audit_logger = AuditLogger()
 
 
 # ============================================================================
@@ -172,7 +156,7 @@ async def persist_window(call: dict, window_number: int, audio_bytes: bytes, ai_
         "speaker_match_score": metrics.get("speaker_match_score"),
         "wald_decision": ai_response.get("wald_decision"),
         "cumulative_risk_score": ai_response.get("cumulative_risk_score"),
-        "latency_ms": ai_response.get("latency_ms"),
+        "latency_ms": round(float(ai_response.get("latency_ms") or 0)),
     })
     risk_score = float(ai_response.get("cumulative_risk_score") or 0)
     risk_level = ai_response.get("wald_decision") or "SAFE"
@@ -203,6 +187,27 @@ async def complete_supabase_call(call_id: str, status: str = "COMPLETED") -> Non
         {"call_id": f"eq.{call_id}"},
         {"status": status, "ended_at": datetime.utcnow().isoformat()},
     )
+    calls = await supabase.select(
+        "call_sessions",
+        columns="id,call_id,risk_level,final_decision,current_risk_score",
+        params={"call_id": f"eq.{call_id}"},
+    )
+    call = calls[0] if calls else {}
+    audit_data = {
+        "call_id": call_id,
+        "action_taken": "BLOCKED" if call.get("final_decision") == "BLOCKED" else "ALLOWED",
+        "risk_score": float(call.get("current_risk_score") or 0),
+        "risk_level": call.get("risk_level") or "SAFE",
+        "status": status,
+        "timestamp": datetime.utcnow().isoformat(),
+    }
+    await supabase.insert("audit_ledger", {
+        "event_id": str(uuid4()),
+        "call_id": call.get("id"),
+        "event_type": "CALL_COMPLETED",
+        "event_data": audit_data,
+        "event_hash": compute_audit_hash(audit_data),
+    })
 
 
 # ============================================================================
@@ -220,7 +225,7 @@ def compute_audit_hash(event_data: dict) -> str:
 # ============================================================================
 
 @app.post("/api/v1/auth/signup")
-async def signup(request: SignupRequest, db: Session = Depends(get_db)):
+async def signup(request: SignupRequest):
     """Create a Supabase Auth account and its public users profile."""
     email = request.email.strip().lower()
     name = request.name.strip()
@@ -247,7 +252,7 @@ async def signup(request: SignupRequest, db: Session = Depends(get_db)):
 
 
 @app.post("/api/v1/auth/signin")
-async def signin(request: AuthCredentials, db: Session = Depends(get_db)):
+async def signin(request: AuthCredentials):
     """Validate credentials with Supabase Auth."""
     email = request.email.strip().lower()
     try:
@@ -293,23 +298,41 @@ async def list_calls():
     """List call sessions from Supabase."""
     calls = await supabase.select(
         "call_sessions",
-        columns="call_id,claimed_identity,source_phone,status,max_risk_score,current_risk_score,risk_level,final_decision,transaction_amount,started_at,ended_at,created_at",
-        params={"order": "created_at.desc"},
+        columns="id,call_id,claimed_identity,source_phone,status,max_risk_score,current_risk_score,risk_level,final_decision,transaction_amount,started_at,ended_at,created_at",
+        params={"status": "neq.IN_PROGRESS", "order": "created_at.desc", "limit": 10},
     )
-    return [
-        {
-                "call_id": c["call_id"],
-            "claimed_identity": c["claimed_identity"],
-            "source_phone": c.get("source_phone"),
-            "status": c["status"],
-            "max_risk_score": c["max_risk_score"],
-            "decision": c.get("final_decision"),
-            "risk_level": c["risk_level"],
-            "transaction_amount": c.get("transaction_amount"),
-            "created_at": c["created_at"],
-        }
-        for c in calls
-    ]
+    call_ids = [call["id"] for call in calls]
+    predictions_by_call = {call_id: [] for call_id in call_ids}
+    if call_ids:
+        predictions = await supabase.select(
+            "ai_predictions",
+            columns="call_id,aasist_spoof_score,prosody_anomaly_score,speaker_match_score,latency_ms",
+            params={"call_id": f"in.({','.join(call_ids)})", "order": "created_at.asc"},
+        )
+        for prediction in predictions:
+            predictions_by_call.setdefault(prediction["call_id"], []).append(prediction)
+    result = []
+    for call in calls:
+        predictions = predictions_by_call.get(call["id"], [])
+        count = len(predictions)
+        average = lambda key: round(sum(float(row.get(key) or 0) for row in predictions) / count, 4) if count else None
+        result.append({
+            "call_id": call["call_id"],
+            "claimed_identity": call["claimed_identity"],
+            "source_phone": call.get("source_phone"),
+            "status": call["status"],
+            "max_risk_score": call["max_risk_score"],
+            "decision": call.get("final_decision"),
+            "risk_level": call["risk_level"],
+            "transaction_amount": call.get("transaction_amount"),
+            "created_at": call["created_at"],
+            "acoustic_anomaly_score": average("aasist_spoof_score"),
+            "prosody_deviation_score": average("prosody_anomaly_score"),
+            "voiceprint_mismatch_score": average("speaker_match_score"),
+            "ai_inference_count": count,
+            "avg_latency_ms": average("latency_ms"),
+        })
+    return result
 
 
 @app.get("/api/v1/speaker-profiles")
@@ -446,17 +469,51 @@ async def upload_recorded_call(
     source_phone: str = Form(""),
     transaction_amount: float = Form(0),
 ):
-    """Analyze a recorded WAV/AIFF/FLAC call as PCM windows."""
-    if not audio.content_type or audio.content_type not in {
-        "audio/wav", "audio/x-wav", "audio/wave", "audio/flac", "audio/x-flac", "audio/aiff", "audio/x-aiff"
-    }:
-        raise HTTPException(status_code=415, detail="Upload a WAV, AIFF, or FLAC recording")
+    """Analyze a recorded WAV/AIFF/FLAC/MP3 call as PCM windows."""
+    call_id = None
+    filename = (audio.filename or "").lower()
+    raw_audio = await audio.read()
+    supported_types = {
+        "audio/wav", "audio/x-wav", "audio/wave", "audio/flac", "audio/x-flac",
+        "audio/aiff", "audio/x-aiff", "audio/mpeg", "audio/mp3",
+    }
+    supported_extensions = (".mp3", ".mpeg", ".mpga", ".wav", ".flac", ".aiff", ".aif")
+    is_wav_signature = raw_audio.startswith(b"RIFF") and raw_audio[8:12] == b"WAVE"
+    is_mp3_signature = raw_audio.startswith(b"ID3") or (
+        len(raw_audio) > 1 and raw_audio[0] == 0xFF and raw_audio[1] & 0xE0 == 0xE0
+    )
+    if audio.content_type not in supported_types and not filename.endswith(supported_extensions) and not (is_wav_signature or is_mp3_signature):
+        raise HTTPException(
+            status_code=415,
+            detail="Allowed files: MP3, MPEG, WAV, FLAC, AIFF, and AIF only.",
+        )
 
     try:
         import numpy as np
-        import soundfile as sf
-        raw_audio = await audio.read()
-        samples, sample_rate = sf.read(io.BytesIO(raw_audio), dtype="float32")
+        is_mp3 = (
+            filename.endswith(".mp3")
+            or audio.content_type in {"audio/mpeg", "audio/mp3"}
+            or is_mp3_signature
+        )
+        if is_mp3:
+            import av
+            container = av.open(io.BytesIO(raw_audio), mode="r")
+            stream = next(stream for stream in container.streams if stream.type == "audio")
+            decoded_frames = [frame.to_ndarray() for frame in container.decode(stream)]
+            container.close()
+            if not decoded_frames:
+                raise ValueError("MP3 file contains no audio frames")
+            samples = np.concatenate(decoded_frames, axis=-1)
+            if samples.ndim > 1:
+                samples = samples.mean(axis=0)
+            if np.issubdtype(samples.dtype, np.integer):
+                samples = samples.astype(np.float32) / np.iinfo(samples.dtype).max
+            else:
+                samples = samples.astype(np.float32)
+            sample_rate = stream.rate
+        else:
+            import soundfile as sf
+            samples, sample_rate = sf.read(io.BytesIO(raw_audio), dtype="float32")
         if samples.ndim > 1:
             samples = samples.mean(axis=1)
         if sample_rate != settings.SAMPLE_RATE:

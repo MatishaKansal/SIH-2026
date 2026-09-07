@@ -1,7 +1,6 @@
 import { Lock, ShieldAlert, ShieldCheck, Fingerprint, ArrowRight, AlertTriangle } from 'lucide-react';
 
-export default function TransactionPanel({ transaction, isSafe }) {
-  const isBlocked = !isSafe;
+export default function TransactionPanel({ transaction, isSafe, isBlocked = false }) {
 
   return (
     <div className="glass-card p-5 relative overflow-hidden">
